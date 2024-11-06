@@ -1,0 +1,33 @@
+# Go binary executables
+*.exe
+*.exe~
+*.out
+*.test
+
+# Go build artifacts
+bin/
+obj/
+
+# Go module cache
+# If you want to ignore the entire Go module cache, uncomment the line below
+.go-build/
+
+# Vendor directory
+/vendor/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Go coverage files
+*.cov
+
+# Dependency directories (for Go modules)
+/vendor/
+
+# Golang specific ignores
+*.log
+
