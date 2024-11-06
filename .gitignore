@@ -31,3 +31,5 @@ obj/
 # Golang specific ignores
 *.log
 
+# My personal notes/scratch files
+*notes*
