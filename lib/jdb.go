@@ -1,29 +1,31 @@
-package jdb
+package lib
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"os"
-	"time"
-	"btree"
-	"strings"
 	"path/filepath"
+	"strings"
+	"time"
 )
 
 // holds metadata and binary data
 type FileData struct {
-	Name string
-	Path string
-	Size int64
-	Hash string
+	Name     string
+	Path     string
+	Size     int64
+	Hash     string
 	Modified bool
 	Mod_time time.Time
-	Data []byte // store data as byte slice
+	Data     []byte // store data as byte slice
 }
 
 type Directory struct {
-	Name string
-	Path string
-	Size int64
-	Files []*FileData
+	Name    string
+	Path    string
+	Size    int64
+	Files   []*FileData
 	Subdirs []*Directory
 }
 
@@ -40,9 +42,9 @@ func calcHash(data []byte) string {
 
 func ReadFile(path string) (*FileData, error) {
 	// read data into byte slice
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Error: reading file %s: %v", path, err)
+		return nil, fmt.Errorf("error: reading file %s: %v", path, err)
 	}
 	// calculate file size
 	size := int64(len(data))
@@ -56,20 +58,19 @@ func ReadFile(path string) (*FileData, error) {
 
 	// return FileData object
 	return &FileData{
-		Name: name,
-		Path: path,
-		Size: size,
-		Hash: Hash,
+		Name:     name,
+		Path:     path,
+		Size:     size,
+		Hash:     hash,
 		Modified: true,
 		Mod_time: modtime,
-		Data: data,
-
+		Data:     data,
 	}, nil
 }
 
 // store file in memory
 func storeInDir(dir *Directory, filedata *FileData) {
-	dir.Files = append(dir.Files, *filedata)
+	dir.Files = append(dir.Files, filedata)
 }
 
 func storeInBin(filename string, filedata *FileData) error {
@@ -96,12 +97,12 @@ func storeInBin(filename string, filedata *FileData) error {
 	if err != nil {
 		return fmt.Errorf("Error: writing file data %s: %v", filename, err)
 	}
-	
+
 	return nil
 }
 
 func readBinFile(filename string) (*FileData, error) {
-	file, err := os.Open(filname)
+	file, err := os.Open(filename)
 	if err != nil {
 		return nil, fmt.Errorf("Error: opening bin file %s: %v", filename, err)
 	}
@@ -109,8 +110,8 @@ func readBinFile(filename string) (*FileData, error) {
 	var path string
 	var size int64
 	var hash string
-	
-	data, err := ioutil.ReadAll(file)
+
+	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, fmt.Errorf("Error: reading bin file: %v", err)
 	}
