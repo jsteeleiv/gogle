@@ -1,4 +1,4 @@
-package trie
+package lib
 
 type TrieNode struct{
 	children map[rune]*TrieNode // https://go.dev/blog/strings
@@ -10,13 +10,13 @@ type Trie struct{
 }
 
 func NewTrie() *Trie{
-	return &Trie{root: &TrieNode{chidlren: make(map[rune]*TrieNode)}}
+	return &Trie{root: &TrieNode{children: make(map[rune]*TrieNode)}}
 }
 
 func (trie *Trie) Insert(word string){
 	node := trie.root
 	for _, char := range word {
-		if _, exists := node.children]char]; !exists {
+		if _, exists := node.children[char]; !exists {
 			node.children[char] = &TrieNode{children: make(map[rune]*TrieNode)}
 		}
 		node = node.children[char]
